@@ -31,6 +31,7 @@ export const registerUser = async (
 
 export const loginUser = async (email: string, password: string) => {
   const user = await userRepo().findOne({ where: { email } });
+  console.log(userRepo().createQueryBuilder().getQuery());
   if (!user) {
     throw new Error("Invalid email or password");
   }
