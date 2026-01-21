@@ -12,7 +12,7 @@ export const registerUser = async (
   role: UserRole,
 ) => {
   const existingUser = await userRepo().findOne({ where: { email } });
-  console.log(userRepo().createQueryBuilder().getQuery());
+  // console.log(userRepo().createQueryBuilder().getQuery());
   if (existingUser) {
     throw new Error("User with this email already exists");
   }
@@ -25,13 +25,13 @@ export const registerUser = async (
     role,
   });
   await userRepo().save(newUser);
-  console.log(userRepo().createQueryBuilder().getQuery());
+  // console.log(userRepo().createQueryBuilder().getQuery());
   return newUser;
 };
 
 export const loginUser = async (email: string, password: string) => {
   const user = await userRepo().findOne({ where: { email } });
-  console.log(userRepo().createQueryBuilder().getQuery());
+  // console.log(userRepo().createQueryBuilder().getQuery());
   if (!user) {
     throw new Error("Invalid email or password");
   }
