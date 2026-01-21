@@ -1,12 +1,14 @@
-import 'reflect-metadata';
-import { DataSource } from 'typeorm';
-import { ENV } from './config/env';
-import { User } from './entity/User';
-import { Product } from './entity/Product';
-import { Category } from './entity/Category';
+import "reflect-metadata";
+import { DataSource } from "typeorm";
+import { ENV } from "./config/env";
+import { User } from "./entity/User";
+import { Product } from "./entity/Product";
+import { Category } from "./entity/Category";
+import { Cart } from "./entity/Cart";
+import { CartItem } from "./entity/CartItem";
 
 export const AppDataSource = new DataSource({
-  type: 'postgres',
+  type: "postgres",
   host: ENV.DB_HOST,
   port: ENV.DB_PORT,
   username: ENV.DB_USER,
@@ -14,5 +16,5 @@ export const AppDataSource = new DataSource({
   database: ENV.DB_NAME,
   synchronize: true, // dev only
   logging: true,
-  entities: [User,Product,Category],
+  entities: [User, Product, Category, Cart, CartItem],
 });
