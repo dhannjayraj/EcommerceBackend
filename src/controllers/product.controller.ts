@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
 import * as productService from "../services/product.service";
+import { validateProduct } from "../validations/product.validation";
 
 export const create = async (req: Request, res: Response) => {
   try {
+    // ✅ Validate product body
+    validateProduct(req.body);
+    
     const product = await productService.createProduct(
       req.body,
       (req as any).user,

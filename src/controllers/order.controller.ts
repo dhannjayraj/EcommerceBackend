@@ -1,23 +1,25 @@
-import { Response } from 'express';
-import { AppDataSource } from '../data-source';
-import { AuthRequest } from '../middlewares/auth.middleware';
-import { Cart } from '../entity/Cart';
-import { Order } from '../entity/Order';
-import { OrderItem } from '../entity/OrderItem';
-import { Product } from '../entity/Product';
+import { Response } from "express";
+import { AppDataSource } from "../data-source";
+import { AuthRequest } from "../middlewares/auth.middleware";
+import { Cart } from "../entity/Cart";
+import { Order } from "../entity/Order";
+import { OrderItem } from "../entity/OrderItem";
+import { Product } from "../entity/Product";
+import { validatePlaceOrder } from "../validations/order.validation";
 
 export class OrderController {
   static async placeOrder(req: AuthRequest, res: Response) {
+    validatePlaceOrder(req.body);
     const userId = req.user!.id;
 
     await AppDataSource.manager.transaction(async (manager) => {
       const cart = await manager.findOne(Cart, {
         where: { user: { id: userId } },
-        relations: ['items', 'items.product'],
+        relations: ["items", "items.product"],
       });
 
       if (!cart || cart.items.length === 0) {
-        throw new Error('Cart is empty');
+        throw new Error("Cart is empty");
       }
 
       let totalAmount = 0;
@@ -57,7 +59,7 @@ export class OrderController {
       await manager.remove(cart.items);
 
       res.status(201).json({
-        message: 'Order placed successfully',
+        message: "Order placed successfully",
         order,
       });
     });
@@ -66,7 +68,7 @@ export class OrderController {
   static async myOrders(req: AuthRequest, res: Response) {
     const orders = await AppDataSource.getRepository(Order).find({
       where: { user: { id: req.user!.id } },
-      relations: ['items', 'items.product'],
+      relations: ["items", "items.product"],
     });
 
     res.json(orders);

@@ -9,6 +9,7 @@ import { CartItem } from "./entity/CartItem";
 import { Order } from "./entity/Order";
 import { OrderItem } from "./entity/OrderItem";
 import { Payment } from "./entity/Payment";
+import { Review } from "./entity/Review";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -28,5 +29,6 @@ export const AppDataSource = new DataSource({
     Order,
     OrderItem,
     Payment,
+    Review,
   ],
 });

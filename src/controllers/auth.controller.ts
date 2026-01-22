@@ -1,18 +1,23 @@
-import { Request, Response } from "express";
-import { registerUser, loginUser } from "../services/auth.service";
-import { UserRole } from "../entity/User";
+import { Request, Response } from 'express';
+import { registerUser, loginUser } from '../services/auth.service';
+import { UserRole } from '../entity/User';
+import { validateRegister, validateLogin } from '../validations/auth.validation';
 
 export const register = async (req: Request, res: Response) => {
   try {
+    // ✅ 1) Validate incoming body
+    validateRegister(req.body);
+
     const { name, email, password, role } = req.body;
 
     const user = await registerUser(
       name,
       email,
       password,
-      role || UserRole.CUSTOMER,
+      role || UserRole.CUSTOMER
     );
-    res.status(201).json({ message: "User registered", user });
+
+    res.status(201).json({ message: 'User registered', user });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
@@ -20,6 +25,9 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
+    // ✅ 1) Validate incoming body
+    validateLogin(req.body);
+
     const { email, password } = req.body;
 
     const data = await loginUser(email, password);
