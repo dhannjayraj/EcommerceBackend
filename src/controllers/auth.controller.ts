@@ -1,11 +1,16 @@
-import { Request, Response } from 'express';
-import { registerUser, loginUser } from '../services/auth.service';
-import { UserRole } from '../entity/User';
-import { validateRegister, validateLogin } from '../validations/auth.validation';
+import { Request, Response } from "express";
+import { registerUser, loginUser } from "../services/auth.service";
+import { UserRole } from "../entity/User";
+import { successResponse, errorResponse } from "../utils/response";
+
+import {
+  validateRegister,
+  validateLogin,
+} from "../validations/auth.validation";
 
 export const register = async (req: Request, res: Response) => {
   try {
-    // ✅ 1) Validate incoming body
+    //  Validate incoming body
     validateRegister(req.body);
 
     const { name, email, password, role } = req.body;
@@ -14,18 +19,20 @@ export const register = async (req: Request, res: Response) => {
       name,
       email,
       password,
-      role || UserRole.CUSTOMER
+      role || UserRole.CUSTOMER,
     );
 
-    res.status(201).json({ message: 'User registered', user });
-  } catch (error: any) {
-    res.status(400).json({ error: error.message });
+    return res
+      .status(201)
+      .json(successResponse(user, "User registered successfully"));
+  } catch (err: any) {
+    return res.status(400).json(errorResponse(err.message));
   }
 };
 
 export const login = async (req: Request, res: Response) => {
   try {
-    // ✅ 1) Validate incoming body
+    // Validate incoming body
     validateLogin(req.body);
 
     const { email, password } = req.body;
